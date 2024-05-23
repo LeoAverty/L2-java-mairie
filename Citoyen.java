@@ -47,6 +47,7 @@ public abstract class Citoyen {
 	 */
 	public Mairie mairie;
 
+
 	/**
 	 * Default constructor
 	 */
@@ -65,6 +66,8 @@ public abstract class Citoyen {
 		} 
 		return false;
 	}
+
+	
 
 	// public static void main(String[] args) {
 	// 	Citoyen p = new Citoyen(1, "aaa", "bbb", 22);

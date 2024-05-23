@@ -75,14 +75,13 @@ public class Femme extends Citoyen {
         scanner.nextLine(); // Lire la nouvelle ligne après l'entier
         // 
         // Créer une nouvelle femme avec les informations lues
-        return new Femme(id, nom, prenom, age);
+        return new Femme(id, nom, prenom, age, null);
     }
 
 
 
 
 }
-
 
 
 

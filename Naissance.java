@@ -1,5 +1,6 @@
 
 
+
 import java.time.*;
 
 /**
@@ -11,6 +12,8 @@ public class Naissance {
 	 * Date de naissance.
 	 */
 	private LocalDate dateNaissance;
+
+	public int IDf, IDh;
 
 	/**
 	 * C'est la mère.
@@ -35,10 +38,10 @@ public class Naissance {
 	/**
 	 * Default constructor
 	 */
-	public Naissance(LocalDate dateNaissance, Homme pere, Femme mere,  Citoyen enfant, Mairie mairie) {
+	public Naissance(LocalDate dateNaissance, int IDh, int IDf,  Citoyen enfant, Mairie mairie) {
 		this.dateNaissance = dateNaissance;
-		this.homme = pere;
-		this.femme = mere;
+		this.IDf = IDf;
+		this.IDh = IDh;
 		this.citoyen = enfant;
 		this.mairie = mairie;
 	}

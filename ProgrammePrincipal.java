@@ -32,6 +32,7 @@ public class ProgrammePrincipal {
 			switch (choix) {
 				case 1:
 
+					// MARIAGE
 					System.out.println("1. saisir un mariage");
 					System.out.println("2. afficher la liste des mariages ");
 					choix = scanner.nextInt();
@@ -39,24 +40,34 @@ public class ProgrammePrincipal {
 
 					switch (choix) {
 						case 1:
+						//Entrer l'ID de la femme 
 							System.out.println("Entrez l'ID de la femme :");
 							int personne1Id = scanner.nextInt();
-
-							while (mairie.Femmeexiste(personne1Id) == false) {
+						//Boucle pour verifier si l'ID existe et si la femme est célibataire(Méthodes: Femmeexiste et etatPersonne)
+						while (mairie.Femmeexiste(personne1Id) == false || mairie.etatPersonne(personne1Id).equals("marier")) {
+							if (mairie.Femmeexiste(personne1Id) == false) {
 								System.out.println("ce ID n'exixte pas, please Entrez l'ID de la femme :");
-								personne1Id = scanner.nextInt();
+							} else if (mairie.etatPersonne(personne1Id).equals("marier")) {
+								System.out.println("Cette femme est déjà mariée, veuillez entrer l'ID d'une femme célibataire :");
 							}
-
+							personne1Id = scanner.nextInt();
+						}
+						//Entrer l'ID de l'homme
 							System.out.println("Entrez l'ID de l'homme :");
 							int personne2Id = scanner.nextInt();
-							while (mairie.Hommeexiste(personne2Id) == false) {
+						//Boucle pour verifier si l'ID existe et si l'hommme est célibataire (Méthodes: Hommeexiste et etatPersonne)
+						while (mairie.Hommeexiste(personne2Id) == false || mairie.etatPersonne(personne2Id).equals("marier")) {
+							if (mairie.Hommeexiste(personne2Id) == false) {
 								System.out.println("ce ID n'exixte pas, please Entrez l'ID de l'homme :");
-								personne2Id = scanner.nextInt();
+							} else if (mairie.etatPersonne(personne2Id).equals("marier")) {
+								System.out.println("Cet homme est déjà marié, veuillez entrer l'ID d'un homme célibataire :");
 							}
+							personne2Id = scanner.nextInt();
+						}
 							
-
+						
+						//Entrer la date de mariage
 							System.out.println("Entrez la date de mariage :");
-
 							System.out.println("Annee :");
 							an = scanner.nextInt();
 							do {
@@ -85,22 +96,53 @@ public class ProgrammePrincipal {
 					break;
 
 				case 2:
+					//DIVORCE
+					//Entrer l'ID de la femme 
 					System.out.println("Entrez l'ID de la femme à divorcer :");
 					int femmeId = scanner.nextInt();
 
+					//Boucle pour verifier si l'ID existe et si la femme est célibataire(Méthodes: Femmeexiste et etatPersonne)
+					while (mairie.Femmeexiste(femmeId) == false || !mairie.etatPersonne(femmeId).equals("marier")) {
+						if (mairie.Femmeexiste(femmeId) == false) {
+							System.out.println("ce ID n'exixte pas, please Entrez l'ID de la femme :");
+						} else if (!mairie.etatPersonne(femmeId).equals("marier")) {
+							System.out.println("Cette femme n'est pas mariée, veuillez entrer l'ID d'une femme mariée :");
+						}
+						femmeId = scanner.nextInt();
+					}
+
+					//Entrer l'ID de l'homme
 					System.out.println("Entrez l'ID de l'homme à divorcer :");
 					int hommeID = scanner.nextInt();
-					System.out.println("Entrez la date de mariage :");
-					System.out.println("Annee :");
-					an = scanner.nextInt();
-					System.out.println("mois :");
-					mm = scanner.nextInt();
-					System.out.println("jour :");
-					jj = scanner.nextInt();
-					dateM = LocalDate.of(an, mm, jj);
 
-					Mariage ma = new Mariage(dateM, femmeId, hommeID);
-					if (mairie.existMariage(ma)) {
+					// Boucle pour vérifier si l'ID existe et si l'homme est célibataire (Méthodes: Hommeexiste et etatPersonne)
+					while (mairie.Hommeexiste(hommeID) == false || !mairie.etatPersonne(hommeID).equals("marier")) {
+						if (mairie.Hommeexiste(hommeID) == false) {
+							System.out.println("ce ID n'exixte pas, please Entrez l'ID de l'homme :");
+						} else if (!mairie.etatPersonne(hommeID).equals("marier")) {
+							System.out.println("Cet homme n'est pas marié, veuillez entrer l'ID d'un homme marié :");
+						}
+						hommeID = scanner.nextInt();
+					}
+					// Entrer la date de mariage 
+					Mariage ma;
+					do {
+    				System.out.println("Entrez la date de mariage :");
+    				System.out.println("Annee :");
+    				an = scanner.nextInt();
+    				System.out.println("mois :");
+    				mm = scanner.nextInt();
+    				System.out.println("jour :");
+    				jj = scanner.nextInt();
+    				dateM = LocalDate.of(an, mm, jj);
+    				ma = new Mariage(dateM, femmeId, hommeID);
+
+    				if (!mairie.existMariage(ma)) {
+        			System.out.println("ERROR: Aucun mariage n'existe avec cette date et ces IDs. Veuillez entrer une date de mariage valide.");
+    				}
+					} while (!mairie.existMariage(ma));
+					
+					
 						System.out.println("Entrez la date de divorce :");
 						System.out.println("Annee :");
 						an = scanner.nextInt();
@@ -115,9 +157,7 @@ public class ProgrammePrincipal {
 
 						mairie.delete_mariage(ma);
 
-					} else {
-						System.out.println("ERROR");
-					}
+					
 
 					break;
 				case 3:
@@ -179,10 +219,10 @@ public class ProgrammePrincipal {
 						scanner.nextLine();
 						switch (choix) {
 						case 1:
-						pNaissance = new Homme(idNaissance, nomNaissance, prenomNaissance, ageNaissance);
+						pNaissance = new Homme(idNaissance, nomNaissance, prenomNaissance, ageNaissance, mairie);
 							break;
 						case 2:
-						pNaissance = new Femme(idNaissance, nomNaissance, prenomNaissance, ageNaissance);
+						pNaissance = new Femme(idNaissance, nomNaissance, prenomNaissance, ageNaissance, mairie);
 							break;
 						default:
 							System.out.println("choix invalide : " + choix);
@@ -190,19 +230,29 @@ public class ProgrammePrincipal {
 						}
 					}
 					mairie.ajoutCitoyen(pNaissance);
+					Naissance naissance = new Naissance(dateM, pereId, mereId, pNaissance,mairie);	
 
-					Naissance naissance = new Naissance(dateM, pereId, mereId, pNaissance);	
+
+						
 
 					// mairie.ajouterNaissance(naissance);
 
 					break;
 						
 				case 4:
-					System.out.println("Entrez l'ID de la personne dont vous voulez connaître l'état :");
-					int personneIdEtat = scanner.nextInt();
-					String etat = mairie.etatPersonne(personneIdEtat);
-					System.err.println(etat);
-					break;
+				System.out.println("Entrez l'ID de la personne :");
+				int IDp = scanner.nextInt();
+				Citoyen c = mairie.getCitoyen(IDp);
+				if (c != null) {
+					System.out.println("Nom : " + c.nom);
+					System.out.println("Prénom : " + c.prenom);
+					System.out.println("Age : " + c.age);
+					System.out.println("Sexe : " + c.getClass().getName());
+					System.out.println("Etat civil : " + mairie.etatPersonne(IDp));
+				} else {
+					System.out.println("Erreur : cette personne n'existe pas.");
+				}
+				break;
 					
 				case 5:
 					System.out.println("Menu :");
@@ -256,10 +306,10 @@ public class ProgrammePrincipal {
 						scanner.nextLine();
 						switch (choix) {
 						case 1:
-							p = new Homme(id, nom, prenom, age);
+							p = new Homme(id, nom, prenom, age, mairie);
 							break;
 						case 2:
-							p = new Femme(id, nom, prenom, age);
+							p = new Femme(id, nom, prenom, age, mairie);
 							break;
 						default:
 							System.out.println("choix invalide : " + choix);
